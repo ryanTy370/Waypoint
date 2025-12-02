@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WayPoint - Transportation Communicator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+            color: white;
+            padding: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none"><path d="M0,0V100H1000V0C850,40 750,60 500,60 250,60 150,40 0,0Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: 100% 100px;
+            background-position: bottom;
+            background-repeat: no-repeat;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 500px;
+            margin-top: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .download-btn {
+            background: #10B981;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #1E3A8A;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 25px 0;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #3B82F6;
+        }
+
+        nav a.active {
+            color: #3B82F6;
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #3B82F6;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .driver-portal {
+            background: #1E3A8A;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .driver-portal:hover {
+            background: #3B82F6;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(30, 58, 138, 0.9), rgba(59, 130, 246, 0.9)), url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            margin: 40px 0;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-top: 40px;
+        }
+
+        .booking-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1E3A8A;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #E2E8F0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-icon {
+            position: absolute;
+            left: 15px;
+            bottom: 15px;
+            color: #64748B;
+            font-size: 18px;
+        }
+
+        .book-now-btn {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            grid-column: 1 / -1;
+        }
+
+        .book-now-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Services Section */
+        .services-section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            color: #1E3A8A;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, #3B82F6, #10B981);
+            margin: 20px auto;
+            border-radius: 5px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #3B82F6, #10B981);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-color: #3B82F6;
+        }
+
+        .service-icon {
+            font-size: 48px;
+            color: #3B82F6;
+            margin-bottom: 25px;
+            background: #EFF6FF;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 25px;
+        }
+
+        .service-card h3 {
+            color: #1E3A8A;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .service-card p {
+            color: #64748B;
+            margin-bottom: 25px;
+        }
+
+        .service-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #10B981;
+            margin: 20px 0;
+        }
+
+        .service-btn {
+            background: #3B82F6;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+        }
+
+        .service-btn:hover {
+            background: #2563EB;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            border-radius: 20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            color: #3B82F6;
+            margin-bottom: 20px;
+            background: white;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .feature-item h3 {
+            color: #1E3A8A;
+            margin-bottom: 15px;
+        }
+
+        /* Driver App Section */
+        .driver-app {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+            color: white;
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+
+        .driver-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 60px;
+            align-items: center;
+        }
+
+        .driver-info h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .app-stores {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .app-store-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: white;
+            transition: background 0.3s;
+        }
+
+        .app-store-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: #0F172A;
+            color: white;
+            padding: 80px 0 30px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer-section h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #60A5FA;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section ul li a {
+            color: #CBD5E1;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-section ul li a:hover {
+            color: #60A5FA;
+        }
+
+        .contact-info li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #3B82F6;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #94A3B8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                font-size: 2.2rem;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                padding: 20px 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+            
+            nav a {
+                padding: 10px 0;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .booking-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .app-stores {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <div class="logo">
+                        <i class="fas fa-route"></i>
+                        <div>
+                            <div>WayPoint</div>
+                            <div class="tagline">Smart Transportation & Real-Time Communication</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="download-btn">
+                        <i class="fas fa-download"></i> Get the App
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <ul>
+                <li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#"><i class="fas fa-car"></i> Ride</a></li>
+                <li><a href="#"><i class="fas fa-truck"></i> Deliver</a></li>
+                <li><a href="#"><i class="fas fa-map-marked-alt"></i> Track</a></li>
+                <li><a href="#"><i class="fas fa-comments"></i> Communicate</a></li>
+                <li><a href="#"><i class="fas fa-question-circle"></i> Support</a></li>
+            </ul>
+            
+            <a href="#" class="driver-portal">
+                <i class="fas fa-id-card"></i> Driver Portal
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Seamless Transportation, Real-Time Communication</h1>
+                <p>Book rides, track deliveries, and communicate instantly with drivers. WayPoint connects passengers, drivers, and businesses in one smart platform.</p>
+                
+                <div class="booking-card">
+                    <div class="booking-form">
+                        <div class="form-group">
+                            <label><i class="fas fa-map-marker-alt"></i> Pickup Location</label>
+                            <div class="form-icon">
+                                <i class="fas fa-map-pin"></i>
+                            </div>
+                            <input type="text" placeholder="Enter pickup address">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-flag-checkered"></i> Destination</label>
+                            <div class="form-icon">
+                                <i class="fas fa-flag"></i>
+                            </div>
+                            <input type="text" placeholder="Where to?">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-car"></i> Vehicle Type</label>
+                            <div class="form-icon">
+                                <i class="fas fa-taxi"></i>
+                            </div>
+                            <select>
+                                <option>Economy</option>
+                                <option>Comfort</option>
+                                <option>Premium</option>
+                                <option>SUV</option>
+                                <option>Van</option>
+                            </select>
+                        </div>
+                        
+                        <button class="book-now-btn">
+                            <i class="fas fa-bolt"></i> Book Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="container">
+            <h2 class="section-title">Our Transportation Services</h2>
+            
+            <div class="services-grid">
+                <!-- Service 1 -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-taxi"></i>
+                    </div>
+                    <h3>Ride Hailing</h3>
+                    <p>Quick and reliable rides at your fingertips. Book in seconds, track your driver in real-time.</p>
+                    <div class="service-price">Starting at $2.99</div>
+                    <button class="service-btn">
+                        <i class="fas fa-car"></i> Book Ride
+                    </button>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Package Delivery</h3>
+                    <p>Same-day delivery for packages of any size. Real-time tracking and delivery updates.</p>
+                    <div class="service-price">Starting at $4.99</div>
+                    <button class="service-btn">
+                        <i class="fas fa-shipping-fast"></i> Send Package
+                    </button>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <h3>Commute Share</h3>
+                    <p>Share rides with others heading the same direction. Save money and reduce traffic.</p>
+                    <div class="service-price">Starting at $1.99</div>
+                    <button class="service-btn">
+                        <i class="fas fa-users"></i> Find Commute
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose WayPoint?</h2>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Safe & Secure</h3>
+                    <p>Verified drivers, real-time tracking, and 24/7 safety support for your peace of mind.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <h3>Real-Time Chat</h3>
+                    <p>Communicate directly with your driver without sharing personal phone numbers.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Fast Pickup</h3>
+                    <p>Average pickup time of under 5 minutes in most metropolitan areas.</p>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h3>Best Prices</h3>
+                    <p>Upfront pricing with no hidden fees. Compare options before you book.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Driver App Section -->
+    <section class="driver-app">
+        <div class="container">
+            <div class="driver-content">
+                <div class="driver-info">
+                    <h2>Become a WayPoint Driver</h2>
+                    <p>Earn competitive rates, set your own schedule, and get paid weekly. Join thousands of drivers who choose WayPoint for flexible earning opportunities.</p>
+                    
+                    <div class="app-stores">
+                        <a href="#" class="app-store-btn">
+                            <i class="fab fa-apple"></i>
+                            <div>
+                                <div style="font-size: 0.8rem;">Download on the</div>
+                                <div style="font-weight: 700;">App Store</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="app-store-btn">
+                            <i class="fab fa-google-play"></i>
+                            <div>
+                                <div style="font-size: 0.8rem;">Get it on</div>
+                                <div style="font-weight: 700;">Google Play</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="driver-stats">
+                    <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px;">
+                        <h3 style="margin-bottom: 20px;">Driver Benefits</h3>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                            <div>
+                                <div style="font-size: 2rem; font-weight: 700; color: #10B981;">$25+/hr</div>
+                                <div style="font-size: 0.9rem;">Average Earnings</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 2rem; font-weight: 700; color: #10B981;">24/7</div>
+                                <div style="font-size: 0.9rem;">Support Available</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 2rem; font-weight: 700; color: #10B981;">Flexible</div>
+                                <div style="font-size: 0.9rem;">Schedule</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 2rem; font-weight: 700; color: #10B981;">Weekly</div>
+                                <div style="font-size: 0.9rem;">Payments</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>WayPoint</h3>
+                    <p>Revolutionizing transportation through smart technology and real-time communication.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Ride Hailing</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Package Delivery</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Commute Share</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Business Solutions</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Airport Transfers</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Safety Center</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Driver Support</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <ul class="contact-info">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <div>123 Transport Ave</div>
+                                <div>San Francisco, CA 94107</div>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <div>24/7 Support:</div>
+                                <div>(555) 123-4567</div>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <div>Email:</div>
+                                <div>support@waypoint.com</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2024 WayPoint Transportation Communicator. All rights reserved.</p>
+                <p style="margin-top: 10px;">Privacy Policy | Terms of Service | Cookie Policy</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Booking form functionality
+        document.querySelector('.book-now-btn').addEventListener('click', function() {
+            const pickup = document.querySelector('input[placeholder="Enter pickup address"]').value;
+            const destination = document.querySelector('input[placeholder="Where to?"]').value;
+            const vehicle = document.querySelector('select').value;
+            
+            if (pickup && destination) {
+                alert(`Booking Confirmed!\n\nPickup: ${pickup}\nDestination: ${destination}\nVehicle: ${vehicle}\n\nYour driver will arrive in 5-7 minutes!`);
+                
+                // Reset form
+                document.querySelector('input[placeholder="Enter pickup address"]').value = '';
+                document.querySelector('input[placeholder="Where to?"]').value = '';
+            } else {
+                alert('Please enter both pickup and destination locations.');
+            }
+        });
+
+        // Service buttons
+        document.querySelectorAll('.service-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const service = this.closest('.service-card').querySelector('h3').textContent;
+                const price = this.closest('.service-card').querySelector('.service-price').textContent;
+                
+                alert(`Booking ${service}\n\n${price}\n\nRedirecting to booking form...`);
+            });
+        });
+
+        // Download button
+        document.querySelector('.download-btn').addEventListener('click', function() {
+            alert('Download WayPoint App\n\nAvailable on:\n• App Store for iOS\n• Google Play for Android\n\nRedirecting to app stores...');
+        });
+
+        // Navigation active state
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.classList.contains('active')) return;
+                
+                document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (!this.classList.contains('driver-portal')) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // App store buttons
+        document.querySelectorAll('.app-store-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const store = this.querySelector('.fa-apple') ? 'App Store' : 'Google Play';
+                alert(`Redirecting to ${store} to download WayPoint Driver App...`);
+            });
+        });
+
+        // Driver portal
+        document.querySelector('.driver-portal').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Accessing Driver Portal...\n\nPlease login to your driver account or sign up to become a WayPoint driver.');
+        });
+
+        // Form focus effects
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+    </script>
+</body>
+</html>
